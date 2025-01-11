@@ -3,7 +3,7 @@ import React from "react";
 export default function PlaceholderTable({ rows = 2, columns = 3 }) {
 	return (
 		<div
-			className={`w-full grid gap-4`}
+			className={`w-full grid gap-4 `}
 			style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
 		>
 			{Array.from({ length: rows * columns }).map((_, index) => (

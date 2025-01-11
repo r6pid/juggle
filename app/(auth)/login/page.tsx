@@ -1,6 +1,7 @@
 import { signIn } from "@/auth";
+import { Button } from "@/components/ui/button";
 
-export default function SignIn() {
+export default function LoginPage() {
 	return (
 		<form
 			action={async () => {
@@ -8,7 +9,7 @@ export default function SignIn() {
 				await signIn("google");
 			}}
 		>
-			<button type="submit">Signin with Google</button>
+			<Button type="submit">Log in with Google</Button>
 		</form>
 	);
 }

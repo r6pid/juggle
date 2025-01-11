@@ -1,15 +1,40 @@
-import { DatePicker } from "@nextui-org/date-picker";
+"use client";
 
-export default function Home() {
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
+export default function HomePage() {
 	return (
-		<div>
-			<DatePicker
-				className="max-w-[284px]"
-				// hideTimeZone
-				// showMonthAndYearPickers
-				// defaultValue={now(getLocalTimeZone())}
-				label="Birth date"
-			/>
+		<div className="flex flex-col items-center min-h-screen p-4 bg-white text-black">
+			<header className="w-full flex justify-between items-center p-4"></header>
+			<main className="flex flex-col items-center mt-8 p-4 rounded-md w-full max-w-full ml-40">
+				<div className="flex flex-row w-full">
+					<div className="text-7xl font-bold mb-8 text-left w-1/2">
+						<p>Plan smart.</p>
+						<p>Balance better.</p>
+						<p>Stress less.</p>
+					</div>
+					<div className="flex flex-col items-center justify-center w-1/2">
+						<div className="">
+							<Image
+								src="/image.png"
+								alt="Description of the image"
+								width={300}
+								height={75}
+							/>
+						</div>
+					</div>
+				</div>
+				<div className="w-full">
+					<p className="text-2xl text-left">
+						Juggle helps students balance academics and extracurriculars.
+						<br />
+						Stay organized, prioritize tasks,
+						<br />
+						and manage your schedule with ease!
+					</p>
+				</div>
+			</main>
 		</div>
 	);
 }

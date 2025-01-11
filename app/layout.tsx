@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-// import { Toaster } from "sonner";
+import { Toaster } from "sonner";
 import { SessionProvider } from "next-auth/react";
 import Navbar from "@/components/Navbar";
 
@@ -74,12 +74,12 @@ export default async function RootLayout({
 				<body className={`${inter.variable} font-sans antialiased`}>
 					<Navbar />
 					{children}
-					{/* <Toaster
-							richColors
-							theme="dark"
-							closeButton={true}
-							duration={4000}
-						/> */}
+					<Toaster
+						richColors
+						theme="light"
+						closeButton={true}
+						duration={4000}
+					/>
 				</body>
 			</html>
 		</SessionProvider>

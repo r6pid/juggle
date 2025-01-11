@@ -1,6 +1,5 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import GoogleAuthButton from "@/components/GoogleAuthButton";
@@ -35,7 +34,7 @@ export default function LoginPage() {
 			<Button className="mb-4 w-full">Login</Button>
 			<div className="flex flex-row items-center w-full justify-between">
 				<p className="text-sm font-medium text-muted2">
-					Don't have an account?{" "}
+					Don&apos;t have an account?{" "}
 					<Link
 						href="/signup"
 						className="text-accent hover:underline underline-offset-4 transition-all"

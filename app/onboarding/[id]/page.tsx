@@ -1,7 +1,7 @@
 "use client";
 import NotFound from "@/app/not-found";
 import { Button } from "@/components/ui/button";
-import { Field, Label, Radio, RadioGroup } from "@headlessui/react";
+import { Field, Radio, RadioGroup } from "@headlessui/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -40,6 +40,7 @@ const levels = [
 ];
 
 export default function OnboardingPage() {
+	const [selected, setSelected] = useState(levels[3]);
 	const router = useRouter();
 	const params = useParams();
 	const currentId = parseInt(params.id as string, 10);
@@ -47,7 +48,6 @@ export default function OnboardingPage() {
 	if (!onboardingQuestions.some((question) => question.id === currentId)) {
 		return <NotFound />;
 	}
-	let [selected, setSelected] = useState(levels[3]);
 
 	function handleContinueClick() {
 		if (currentId < 5) {

@@ -2,13 +2,20 @@ import datetime
 
 # Define an Assignment class
 class Assignment:
-    def __init__(self, name, importance, difficulty, due_date, total_time):
+    def __init__(self, name, importance, difficulty, due_date):
         self.name = name
         self.importance = importance
         self.difficulty = difficulty
         self.due_date = due_date
-        self.total_time = total_time  # Total time required to complete the assignment (in minutes)
+        self.total_time = self.calculate_total_time()  # Dynamically calculate total time
         self.time_completed = 0  # Time already spent on the assignment
+
+    def calculate_total_time(self):
+        # Base time is 30 minutes, scaled by importance and difficulty
+        base_time = 30
+        importance_weight = 10  # Time added per unit of importance
+        difficulty_weight = 8   # Time added per unit of difficulty
+        return base_time + (self.importance * importance_weight) + (self.difficulty * difficulty_weight)
 
     def remaining_time(self):
         return self.total_time - self.time_completed
@@ -34,7 +41,7 @@ def sort_assignments(assignments):
     )
 
 
-# Create the optimal schedule with multiple assignments per time frame, including breaks
+# Create the optimal schedule with multiple assignments per time frame, including breaks and splitting assignments
 def createSchedule(time_slots, assignments):
     # Sort assignments globally
     sorted_assignments = sort_assignments(assignments)
@@ -56,6 +63,9 @@ def createSchedule(time_slots, assignments):
                     if remaining_time < time_to_spend + 5:
                         time_to_spend = max(0, remaining_time - 5)
 
+                # Limit time to the remaining time in the slot
+                time_to_spend = min(time_to_spend, remaining_time)
+
                 # Allocate time
                 if time_to_spend > 0:
                     allocations.append((assignment.name, time_to_spend))
@@ -63,7 +73,7 @@ def createSchedule(time_slots, assignments):
                     remaining_time -= time_to_spend
 
                 # Deduct 5 minutes for a break if another allocation is possible
-                if remaining_time >= 5:
+                if remaining_time >= 5 and assignment.remaining_time() > 0:
                     remaining_time -= 5
 
         # Add time slot with allocations to the schedule
@@ -92,14 +102,14 @@ def displaySchedule(schedule):
 # Example usage:
 # Create assignments with actual names and dates
 assignments = [
-    Assignment("Math Homework", 8, 5, datetime.datetime(2025, 1, 12, 18, 0), 120),
-    Assignment("Science Project", 6, 7, datetime.datetime(2025, 1, 15, 9, 0), 180),
-    Assignment("History Essay", 10, 3, datetime.datetime(2025, 1, 13, 20, 0), 90),
-    Assignment("English Reading", 7, 4, datetime.datetime(2025, 1, 14, 10, 0), 60),
-    Assignment("Computer Science Project", 9, 8, datetime.datetime(2025, 1, 16, 12, 0), 240),
-    Assignment("Biology Lab Report", 8, 6, datetime.datetime(2025, 1, 17, 10, 0), 120),
-    Assignment("Physics Homework", 7, 5, datetime.datetime(2025, 1, 18, 12, 0), 90),
-    Assignment("Chemistry Project", 9, 7, datetime.datetime(2025, 1, 19, 10, 0), 180),
+    Assignment("Math Homework", 8, 5, datetime.datetime(2025, 1, 12, 18, 0)),
+    Assignment("Science Project", 6, 7, datetime.datetime(2025, 1, 15, 9, 0)),
+    Assignment("History Essay", 10, 3, datetime.datetime(2025, 1, 13, 20, 0)),
+    Assignment("English Reading", 7, 4, datetime.datetime(2025, 1, 14, 10, 0)),
+    Assignment("Computer Science Project", 9, 8, datetime.datetime(2025, 1, 16, 12, 0)),
+    Assignment("Biology Lab Report", 8, 6, datetime.datetime(2025, 1, 17, 10, 0)),
+    Assignment("Physics Homework", 7, 5, datetime.datetime(2025, 1, 18, 12, 0)),
+    Assignment("Chemistry Project", 9, 7, datetime.datetime(2025, 1, 19, 10, 0)),
 ]
 
 # Create time slots with actual names and dates

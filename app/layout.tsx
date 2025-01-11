@@ -68,8 +68,8 @@ export default async function RootLayout({
 }>) {
 	return (
 		<SessionProvider>
-			<html lang="en">
-				<body className={`${inter.variable} font-sans antialiased`}>
+			<html lang="en" suppressHydrationWarning>
+				<body className={`${inter.variable} font-sans antialiased `}>
 					<Navbar />
 					{children}
 					{/* <Toaster

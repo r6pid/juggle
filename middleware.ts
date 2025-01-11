@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 
 // 1. Specify protected and public routes
 const protectedRoutes = ["/dashboard"];
-const publicRoutes = ["/login", "/signup", "/"];
+const publicRoutes = ["/login", "/signup"];
 
 export default async function middleware(req: NextRequest) {
 	const session = await auth();

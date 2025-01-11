@@ -15,7 +15,6 @@ import { CalendarDate } from "@internationalized/date";
 import { TimeInput } from "@nextui-org/react";
 import { Time } from "@internationalized/date";
 import { Slider } from "@/components/ui/slider";
-import { useState } from "react";
 
 export default function AssignModel() {
 	return (

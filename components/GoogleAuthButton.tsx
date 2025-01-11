@@ -21,7 +21,7 @@ export default function GoogleAuthButton({
 		<Button
 			variant={variant}
 			className="my-8 w-full"
-			onClick={() => signIn("google")}
+			onClick={() => signIn("google", { redirectTo: "/onboarding/1" })}
 		>
 			<FcGoogle className="mr-1" size={30} />
 			{children}

@@ -21,10 +21,23 @@ export default function HomePage() {
 		<div className="flex flex-col items-center justify-center min-h-screen p-4 pt-8 bg-white text-black ml-20">
 			<div className="flex flex-col items-center justify-center mt-16 p-4 rounded-md w-full max-w-full m-0">
 				<div className="flex flex-row w-full m-0">
-					<div className="text-7xl font-bold mb-8 text-left w-full whitespace-nowrap">
-						<p>Plan smart.</p>
-						<p>Balance better.</p>
-						<p>Stress less.</p>
+					<div className="w-full">
+						<p className="text-7xl font-bold text-left w-full whitespace-nowrap">
+							Plan smart.
+						</p>
+						<p className="text-7xl font-bold text-left w-full whitespace-nowrap">
+							Balance better.
+						</p>
+						<p className="text-7xl font-bold text-left w-full whitespace-nowrap">
+							Stress less.
+						</p>
+						<div className="flex flex-col mt-8">
+							<p className="text-2xl">
+								Juggle helps students balance academics and extracurriculars.
+								Stay organized, prioritize tasks, and manage your schedule with
+								ease!
+							</p>
+						</div>
 					</div>
 					<div className="flex flex-col items-center justify-center w-full">
 						<div className="flex flex-col items-center justify-between w-full overflow-x-hidden">
@@ -54,15 +67,6 @@ export default function HomePage() {
 							</Carousel>
 						</div>
 					</div>
-				</div>
-				<div className="w-full">
-					<p className="text-3xl text-left">
-						Juggle helps students balance academics and
-						<br />
-						extracurriculars. Stay organized, prioritize tasks,
-						<br />
-						and manage your schedule with ease!
-					</p>
 				</div>
 			</div>
 		</div>

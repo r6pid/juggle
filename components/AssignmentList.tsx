@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-export default function PlaceholderTable({
+export default function AssignmentList({
 	assignments,
 }: {
 	assignments: Assignment[];

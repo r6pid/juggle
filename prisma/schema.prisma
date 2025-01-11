@@ -17,6 +17,7 @@ model User {
   updatedAt     DateTime        @updatedAt
   accounts      Account[]
   assignments   Assignment[]
+  timeframes Timeframe[]
   Authenticator Authenticator[]
   sessions      Session[]
 }
@@ -28,6 +29,14 @@ model Assignment {
   priority  Int
   difficulty Int
   due        DateTime
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Timeframe {
+  id String @unique @default(cuid())
+  userId String
+  startDate DateTime
+  endDate DateTime
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

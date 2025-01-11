@@ -5,3 +5,9 @@ export interface Assignment {
 	difficulty: number;
 	due: Date;
 }
+
+export interface Timeframe {
+	id: string;
+	startDate: Date;
+	endDate: Date;
+}

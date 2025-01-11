@@ -12,7 +12,6 @@ export default function AvailabilityList({
 }) {
 	const router = useRouter();
 	const [loadingId, setLoadingId] = useState<string | null>(null);
-
 	const deleteTimeframe = async (id: string) => {
 		setLoadingId(id);
 		try {
@@ -41,7 +40,7 @@ export default function AvailabilityList({
 	};
 
 	return (
-		<div className="w-full grid gap-4 grid-cols-2">
+		<div className="w-full grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
 			{timeframes.length < 1 && (
 				<p>No timeframes yet, create one to get started!</p>
 			)}
@@ -63,7 +62,19 @@ export default function AvailabilityList({
 							/>
 						)}
 					</div>
-					<div className="flex items-center justify-between p-2 border border-gray-700 rounded-lg h-72"></div>
+					<div className="flex flex-col w-full p-2 border border-gray-700 rounded-lg min-h-72">
+						{timeframe.assignments
+							.filter((assignment) => assignment.timeframeId === timeframe.id)
+							.map((assignment) => (
+								<div
+									className="flex flex-row p-2 border bg-border rounded-sm items-center justify-between"
+									key={assignment.id}
+								>
+									<p>{assignment.name}</p>
+									<p>{assignment.priority}</p>
+								</div>
+							))}
+					</div>
 				</div>
 			))}
 		</div>

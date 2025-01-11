@@ -17,7 +17,7 @@ model User {
   updatedAt     DateTime        @updatedAt
   accounts      Account[]
   assignments   Assignment[]
-  timeframes Timeframe[]
+  timeframes    Timeframe[]     // List of timeframes associated with the user
   Authenticator Authenticator[]
   sessions      Session[]
 }
@@ -25,19 +25,22 @@ model User {
 model Assignment {
   id         String   @unique @default(cuid())
   userId     String
+  timeframeId String?  // This is now optional
   name       String
-  priority  Int
+  priority   Int
   difficulty Int
   due        DateTime
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  timeframe  Timeframe? @relation(fields: [timeframeId], references: [id], onDelete: Cascade) // The relation is still optional
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Timeframe {
-  id String @unique @default(cuid())
-  userId String
+  id        String       @unique @default(cuid())
+  userId    String
   startDate DateTime
-  endDate DateTime
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endDate   DateTime
+  assignments Assignment[] // List of assignments associated with the timeframe
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {

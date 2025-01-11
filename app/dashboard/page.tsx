@@ -36,14 +36,12 @@ export default async function Dashboard() {
 					<AvailabilityModel />
 					<div className="p-4 bg-[#0000000a] rounded-sm w-full flex">
 						<AvailabilityList
-							assignments={timeframes.flatMap(
-								(timeframe) => timeframe.assignments
-							)}
-							timeframes={timeframes as Timeframe[]}
+							timeframes={timeframes as unknown as Timeframe[]}
 						/>
 					</div>
 				</div>
 			)}
+			``
 		</div>
 	);
 }

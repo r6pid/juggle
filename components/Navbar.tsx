@@ -13,7 +13,7 @@ export default async function Navbar() {
 					className="flex w-fit flex-row items-center justify-center gap-3"
 					href="/"
 				>
-					<Image src={"/vercel.svg"} alt="Logo" width={25} height={25} />
+					<Image src={"/logo.png"} alt="Logo" width={40} height={40} />
 					<p className="text-sm">Juggle</p>
 				</Link>
 			</div>

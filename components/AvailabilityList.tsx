@@ -39,6 +39,8 @@ export default function AvailabilityList({
 		}
 	};
 
+	const currentDate = new Date();
+
 	return (
 		<>
 			{timeframes.length < 1 && (
@@ -83,21 +85,38 @@ export default function AvailabilityList({
 										key={assignment.id}
 									>
 										<p>{assignment.name}</p>
-										{assignment.priority >= 7 && (
+										{(assignment.difficulty + assignment.priority) /
+											((2 *
+												(assignment.due.getTime() - currentDate.getTime())) /
+												18000000) >=
+											1 && (
 											<p className="text-red-500">
 												{assignment.allocation! > 60
 													? `${(assignment.allocation! / 60).toFixed(1)}h`
 													: `${assignment.allocation}m`}
 											</p>
 										)}
-										{assignment.priority >= 4 && assignment.priority <= 6 && (
-											<p className="text-yellow-500">
-												{assignment.allocation! > 60
-													? `${(assignment.allocation! / 60).toFixed(1)}h`
-													: `${assignment.allocation}m`}
-											</p>
-										)}
-										{assignment.priority < 4 && (
+										{(assignment.difficulty + assignment.priority) /
+											((2 *
+												(assignment.due.getTime() - currentDate.getTime())) /
+												18000000) >=
+											0.5 &&
+											(assignment.difficulty + assignment.priority) /
+												((2 *
+													(assignment.due.getTime() - currentDate.getTime())) /
+													18000000) <
+												1 && (
+												<p className="text-yellow-500">
+													{assignment.allocation! > 60
+														? `${(assignment.allocation! / 60).toFixed(1)}h`
+														: `${assignment.allocation}m`}
+												</p>
+											)}
+										{(assignment.difficulty + assignment.priority) /
+											((2 *
+												(assignment.due.getTime() - currentDate.getTime())) /
+												18000000) <
+											0.5 && (
 											<p className="text-green-500">
 												{assignment.allocation! > 60
 													? `${(assignment.allocation! / 60).toFixed(1)}h`

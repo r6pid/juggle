@@ -12,8 +12,9 @@ import Autoplay from "embla-carousel-autoplay";
 export default function HomePage() {
 	// Example slides data
 	const slides = [
-		{ image: "/chopped-chin-chopped.gif", alt: "Slide 1" },
-		{ image: "/logo.gif", alt: "Slide 2" },
+		{ image: "/logo.gif", alt: "Slide 1", isBig: false },
+		{ image: "/img_dashboard.png", alt: "Slide 2", isBig: true },
+		{ image: "/chopped-chin-chopped.gif", alt: "Slide 3", isBig: false },
 		// Add more slides as needed
 	];
 
@@ -46,19 +47,20 @@ export default function HomePage() {
 								opts={{ loop: true }}
 								plugins={[
 									Autoplay({
-										delay: 3000,
+										delay: 2500,
 									}),
 								]}
 							>
 								<CarouselContent>
 									{slides.map((slide, index) => (
 										<CarouselItem key={index}>
-											<div className="p-1">
+											<div className="p-1 flex justify-center items-center">
 												<Image
 													src={slide.image}
 													alt={slide.alt}
-													width={300}
-													height={100}
+													width={slide.isBig ? 400 : 300} // Bigger width for Slide 2
+													height={slide.isBig ? 150 : 100} // Bigger height for Slide 2
+													className={`${slide.isBig ? "scale-105 mt-20" : ""}`} // Shift Slide 2 down
 												/>
 											</div>
 										</CarouselItem>

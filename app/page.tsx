@@ -16,7 +16,7 @@ export default function HomePage() {
 					<div className="flex flex-col items-center justify-center w-1/2">
 						<div className="">
 							<Image
-								src="/image.png"
+								src="/chopped-chin-chopped.gif"
 								alt="Description of the image"
 								width={300}
 								height={75}

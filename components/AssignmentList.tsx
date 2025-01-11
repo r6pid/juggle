@@ -40,6 +40,8 @@ export default function AssignmentList({
 		}
 	};
 
+	const currentDate = new Date()
+
 	return (
 		<div className="w-full grid gap-4 grid-cols-2">
 			{assignments.length < 1 && (
@@ -52,17 +54,17 @@ export default function AssignmentList({
 				>
 					<p>{assignment.name}</p>
 					<div className="flex flex-row items-center gap-3">
-						{assignment.priority >= 7 && (
+						{(assignment.difficulty + assignment.priority) / (2 * (assignment.due.getTime() - currentDate.getTime())/18000000) >= 1 && (
 							<p className="font-semibold text-sm text-red-500">
 								High Priority
 							</p>
 						)}
-						{assignment.priority >= 4 && assignment.priority <= 6 && (
+						{(assignment.difficulty + assignment.priority) / (2 * (assignment.due.getTime() - currentDate.getTime())/18000000) >= 0.5 && (assignment.difficulty + assignment.priority) / (2 * (assignment.due.getTime() - currentDate.getTime())/18000000) < 1 && (
 							<p className="font-semibold text-sm text-yellow-500">
 								Medium Priority
 							</p>
 						)}
-						{assignment.priority < 4 && (
+						{(assignment.difficulty + assignment.priority) / (2 * (assignment.due.getTime() - currentDate.getTime())/18000000) < 0.25 && (
 							<p className="font-semibold text-sm text-green-500">
 								Low Priority
 							</p>

@@ -26,75 +26,66 @@ class TimeSlot:
         self.possible_assignments = assignments
 
 
-# Check compatibility (if total remaining time of assignments can fit in the available time slots)
-def checkCompatibility(time_slots, assignments):
-    total_time_available = sum(ts.length for ts in time_slots)
-    total_time_required = sum(a.remaining_time() for a in assignments)
-    return total_time_required <= total_time_available
+# Sort assignments globally to avoid redundant sorting
+def sort_assignments(assignments):
+    return sorted(
+        assignments,
+        key=lambda x: (x.due_date, -x.importance, -x.difficulty),
+    )
 
 
-# Apply due dates (prioritize assignments with earlier due dates)
-def applyDueDates(time_slots):
-    for ts in time_slots:
-        ts.possible_assignments.sort(key=lambda x: x.due_date)  # Sort by due date (earliest first)
-
-
-# Filter difficulty (prefer harder assignments for longer time slots)
-def filterDifficulty(time_slots):
-    for ts in time_slots:
-        if ts.length > 60:  # Longer slots, prefer harder assignments
-            ts.possible_assignments.sort(key=lambda x: x.difficulty, reverse=True)
-        else:  # Shorter slots, prefer easier assignments
-            ts.possible_assignments.sort(key=lambda x: x.difficulty)
-
-
-# Filter importance (prioritize high-importance assignments)
-def filterImportance(time_slots):
-    for ts in time_slots:
-        ts.possible_assignments.sort(key=lambda x: x.importance, reverse=True)
-
-
-# Create the optimal schedule with multiple assignments per time frame
+# Create the optimal schedule with multiple assignments per time frame, including breaks
 def createSchedule(time_slots, assignments):
-    if not checkCompatibility(time_slots, assignments):
-        raise Exception("Not enough time slots for all assignments")
-    
-    # Prioritize assignments by due dates, difficulty, and importance
-    applyDueDates(time_slots)
-    filterDifficulty(time_slots)
-    filterImportance(time_slots)
+    # Sort assignments globally
+    sorted_assignments = sort_assignments(assignments)
 
+    # Initialize schedule
     schedule = []
+
     for ts in time_slots:
         remaining_time = ts.length
         allocations = []
-        for assignment in ts.possible_assignments:
+        for assignment in sorted_assignments:
             if remaining_time <= 0:
                 break
             if assignment.remaining_time() > 0:
-                # Allocate time to the assignment
-                time_to_spend = min(remaining_time, assignment.remaining_time())
-                allocations.append((assignment.name, time_to_spend))
-                assignment.time_completed += time_to_spend
-                remaining_time -= time_to_spend
+                # Calculate time to spend, reserving breaks
+                time_to_spend = assignment.remaining_time()
+                if allocations:
+                    # Reserve 5 minutes for a break if another assignment was already allocated
+                    if remaining_time < time_to_spend + 5:
+                        time_to_spend = max(0, remaining_time - 5)
 
+                # Allocate time
+                if time_to_spend > 0:
+                    allocations.append((assignment.name, time_to_spend))
+                    assignment.time_completed += time_to_spend
+                    remaining_time -= time_to_spend
+
+                # Deduct 5 minutes for a break if another allocation is possible
+                if remaining_time >= 5:
+                    remaining_time -= 5
+
+        # Add time slot with allocations to the schedule
         if allocations:
             schedule.append({
                 "time_slot": (ts.start_time, ts.end_time),
                 "allocations": allocations,
             })
-    
+
     return schedule
 
 
-# Display the schedule grouped by time frame
+# Display the schedule grouped by time frame with breaks
 def displaySchedule(schedule):
-    print("Generated Schedule (Grouped by Time Frame):")
+    print("Generated Schedule (Grouped by Time Frame, Including Breaks):")
     for entry in schedule:
         start_time, end_time = entry["time_slot"]
         print(f"Time Frame: {start_time} to {end_time}")
-        for allocation in entry["allocations"]:
+        for i, allocation in enumerate(entry["allocations"]):
             print(f"  Assignment: {allocation[0]}, Time Spent: {allocation[1]} minutes")
+            if i < len(entry["allocations"]) - 1:
+                print("  Break: 5 minutes")
         print("-" * 40)
 
 
@@ -131,7 +122,7 @@ time_slots = [
 for ts in time_slots:
     ts.set_possible_assignments(assignments)
 
-# Create and display the schedule
+# Create and display the schedule with breaks
 try:
     schedule = createSchedule(time_slots, assignments)
     displaySchedule(schedule)

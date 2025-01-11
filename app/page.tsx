@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function HomePage() {
     return (
@@ -15,8 +16,8 @@ export default function HomePage() {
                         <p>Stress less.</p>
                     </div>
                     <div className="flex flex-col items-center justify-center w-1/2">
-                        <div className="rounded-md p-16 mb-8">
-                            <p className="text-xl text-blue-400">Pic of the site</p>
+                        <div className="">
+						<Image src="/image.png" alt="Description of the image" width={300} height={75} />
                         </div>
                     </div>
                 </div>

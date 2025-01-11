@@ -1,50 +1,22 @@
-import React from 'react';
+import React from "react";
 
 export default function PlaceholderTable({ rows = 7, columns = 2 }) {
-  return (
-    <div
-      style={{
-        width: '100%',
-        display: 'grid',
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        gap: '16px',
-        padding: '16px',
-      }}
-    >
-      {Array.from({ length: rows * columns }).map((_, index) => (
-        <div
-          key={index}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '8px 16px',
-            border: '1px solid #444',
-            borderRadius: '8px',
-            height: '50px',
-          }}
-        >
-          {/* Circle Placeholder */}
-          <div
-            style={{
-              width: '16px',
-              height: '16px',
-              borderRadius: '50%',
-              backgroundColor: '#444',
-            }}
-          ></div>
-
-          {/* Text Placeholder */}
-          <div
-            style={{
-              width: '60%',
-              height: '16px',
-              backgroundColor: '#444',
-              borderRadius: '4px',
-            }}
-          ></div>
-        </div>
-      ))}
-    </div>
-  );
+	return (
+		<div
+			className="w-full grid gap-4"
+			style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+		>
+			{Array.from({ length: rows * columns }).map((_, index) => (
+				<div
+					key={index}
+					className="flex shadow-md items-center justify-between p-2 border border-gray-700 rounded-lg h-12"
+				>
+					{/* Text Placeholder */}
+					<div className="w-3/5 h-4 bg-gray-700 rounded"></div>
+					{/* Circle Placeholder */}
+					<div className="w-4 h-4 rounded-full bg-gray-700"></div>
+				</div>
+			))}
+		</div>
+	);
 }

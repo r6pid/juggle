@@ -4,6 +4,7 @@ import "./globals.css";
 // import { Toaster } from "sonner";
 import { SessionProvider } from "next-auth/react";
 import Navbar from "@/components/Navbar";
+import { Providers } from "@/components/Providers";
 
 const inter = localFont({
 	src: [
@@ -72,14 +73,16 @@ export default async function RootLayout({
 		<SessionProvider>
 			<html lang="en" suppressHydrationWarning>
 				<body className={`${inter.variable} font-sans antialiased`}>
-					<Navbar />
-					{children}
-					{/* <Toaster
+					<Providers>
+						<Navbar />
+						{children}
+						{/* <Toaster
 							richColors
 							theme="dark"
 							closeButton={true}
 							duration={4000}
 						/> */}
+					</Providers>
 				</body>
 			</html>
 		</SessionProvider>

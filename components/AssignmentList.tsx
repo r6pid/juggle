@@ -1,6 +1,6 @@
 "use client";
 import { Assignment } from "@/types/user";
-import { Loader, Trash } from "lucide-react";
+import { Bomb, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -70,8 +70,8 @@ export default function AssignmentList({
 						{loadingId === assignment.id ? (
 							<Loader size={18} className="animate-spin" />
 						) : (
-							<Trash
-								color={"red"}
+							<Bomb
+								color={"var(--accent)"}
 								size={18}
 								className="cursor-pointer"
 								onClick={() => deleteAssignment(assignment.id)}

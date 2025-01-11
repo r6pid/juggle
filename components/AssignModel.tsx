@@ -204,7 +204,7 @@ export default function AssignModel() {
 							name="priority"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Priority</FormLabel>
+									<FormLabel>Importance</FormLabel>
 									<FormControl>
 										<Slider
 											defaultValue={[5]}

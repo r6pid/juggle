@@ -4,6 +4,7 @@ export interface Assignment {
 	priority: number;
 	timeframeId?: string;
 	difficulty: number;
+	allocation?: number;
 	due: Date;
 }
 

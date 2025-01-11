@@ -15,9 +15,10 @@ CREATE TABLE "User" (
 CREATE TABLE "Assignment" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "timeframeId" TEXT NOT NULL,
+    "timeframeId" TEXT,
     "name" TEXT NOT NULL,
     "priority" INTEGER NOT NULL,
+    "allocation" INTEGER,
     "difficulty" INTEGER NOT NULL,
     "due" TIMESTAMP(3) NOT NULL
 );

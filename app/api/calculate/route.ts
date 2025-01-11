@@ -1,72 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "@/db"; // assuming you have a db helper
 import { auth } from "@/auth"; // assuming you have an auth helper
 
-import { Assignment } from "@prisma/client"; // Import the Assignment model from your existing Prisma setup
-import { Timeframe } from "@prisma/client"; // Import the Timeframe model
-
-// Define a function to sort assignments
-const sortAssignments = (assignments: Assignment[]) => {
-	return assignments.sort(
-		(a, b) =>
-			new Date(a.due).getTime() - new Date(b.due).getTime() ||
-			b.priority - a.priority ||
-			b.difficulty - a.difficulty
-	);
-};
-
-// Create the optimal schedule with multiple assignments per time frame, including breaks and splitting assignments
-export const createSchedule = (
-	timeframes: Timeframe[],
-	assignments: Assignment[]
-) => {
-	const sortedAssignments = sortAssignments(assignments);
-
-	const schedule: {
-		timeSlot: [Date, Date];
-		allocations: { name: string; time: number }[];
-	}[] = [];
-
-	for (const timeframe of timeframes) {
-		let remainingTime =
-			(new Date(timeframe.endDate).getTime() -
-				new Date(timeframe.startDate).getTime()) /
-			60000;
-		const allocations: { name: string; time: number }[] = [];
-
-		for (const assignment of sortedAssignments) {
-			if (remainingTime <= 0) break;
-
-			const totalTime =
-				30 + assignment.priority * 10 + assignment.difficulty * 8; // Calculate total time
-			const timeSpent = Math.min(
-				totalTime - (assignment.allocatedTime || 0),
-				remainingTime
-			);
-
-			if (timeSpent > 0) {
-				allocations.push({ name: assignment.name, time: timeSpent });
-				assignment.allocatedTime = (assignment.allocatedTime || 0) + timeSpent;
-				remainingTime -= timeSpent;
-
-				if (remainingTime >= 5 && totalTime > assignment.allocatedTime) {
-					remainingTime -= 5; // Deduct 5 minutes for a break
-				}
-			}
-		}
-
-		if (allocations.length > 0) {
-			schedule.push({
-				timeSlot: [new Date(timeframe.startDate), new Date(timeframe.endDate)],
-				allocations,
-			});
-		}
-	}
-
-	return schedule;
-};
-
-export async function POST(request: NextRequest) {
+export async function POST() {
 	const session = await auth();
 	if (!session || !session.user.id) {
 		return NextResponse.json(
@@ -76,38 +12,67 @@ export async function POST(request: NextRequest) {
 			{ status: 401 }
 		);
 	}
-
-	const body = await request.json();
-	const { keep } = body;
-
 	// Fetch timeframes
-	const timeframes = await db.timeframe.findMany({
-		where: { userId: session.user.id },
-		select: {
-			userId: true,
-			id: true,
-			startDate: true,
-			endDate: true,
-		},
-	});
+	const [timeframes, assignments] = await Promise.all([
+		db.timeframe.findMany({
+			where: { userId: session.user.id },
+			select: { id: true, startDate: true, endDate: true },
+		}),
+		db.assignment.findMany({
+			where: { userId: session.user.id },
+			select: {
+				id: true,
+				name: true,
+				priority: true,
+				difficulty: true,
+				due: true,
+			},
+		}),
+	]);
 
-	// Fetch assignments
-	const assignments = await db.assignment.findMany({
-		where: { userId: session.user.id },
-		select: {
-			id: true,
-			name: true,
-			userId: true,
-			timeframeId: true,
-			allocatedTime: true,
-			priority: true,
-			difficulty: true,
-			due: true,
-		},
-	});
+	const schedule = await Promise.all(
+		timeframes.map(async (timeframe) => {
+			let accumulatedTime = 0;
+			const currentDate = new Date();
+			const assignmentsInTimeframe = assignments
+				.filter(
+					({ due }) =>
+						new Date(due) >= new Date(timeframe.startDate) &&
+						new Date(due) <= new Date(timeframe.endDate)
+				)
+				.sort((a, b) => {
+					const aDueDate = new Date(a.due);
+					const bDueDate = new Date(b.due);
+					const aPriority =
+						(a.difficulty + a.priority) /
+						(2 * (aDueDate.getTime() - currentDate.getTime()));
+					const bPriority =
+						(b.difficulty + b.priority) /
+						(2 * (bDueDate.getTime() - currentDate.getTime()));
+					return bPriority - aPriority; // Higher priority first
+				})
+				.map((assignment) => {
+					const estimatedTime = assignment.difficulty * 2 + assignment.priority;
+					const adjustedTime = estimatedTime * (1 + accumulatedTime / 100);
+					accumulatedTime += adjustedTime;
+					return { ...assignment, allocation: adjustedTime };
+				});
 
-	// Generate the schedule
-	const schedule = await createSchedule(timeframes, assignments);
+			await Promise.all(
+				assignmentsInTimeframe.map(({ id, allocation }) =>
+					db.assignment.update({
+						where: { id },
+						data: {
+							timeframeId: timeframe.id,
+							allocation: Math.round(allocation),
+						},
+					})
+				)
+			);
+
+			return { ...timeframe, assignments: assignmentsInTimeframe };
+		})
+	);
 
 	console.log(JSON.stringify(schedule));
 

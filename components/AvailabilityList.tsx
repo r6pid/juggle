@@ -48,8 +48,19 @@ export default function AvailabilityList({
 				<div key={index}>
 					<div className="flex flex-row items-center justify-between">
 						<p>
-							{timeframe.startDate.toLocaleString()} -{" "}
-							{timeframe.endDate.toLocaleString()}
+							{new Date(timeframe.startDate).toLocaleString("en-US", {
+								month: "short",
+								day: "numeric",
+								hour: "2-digit",
+								minute: "2-digit",
+							})}{" "}
+							-{" "}
+							{new Date(timeframe.endDate).toLocaleString("en-US", {
+								month: "short",
+								day: "numeric",
+								hour: "2-digit",
+								minute: "2-digit",
+							})}
 						</p>
 						{loadingId === timeframe.id ? (
 							<Loader size={18} className="animate-spin" />
@@ -62,7 +73,7 @@ export default function AvailabilityList({
 							/>
 						)}
 					</div>
-					<div className="flex flex-col w-full p-2 border border-gray-700 rounded-lg min-h-72">
+					<div className="flex flex-col gap-2 w-full p-2 border border-gray-700 rounded-lg min-h-72">
 						{timeframe.assignments
 							.filter((assignment) => assignment.timeframeId === timeframe.id)
 							.map((assignment) => (
@@ -71,7 +82,27 @@ export default function AvailabilityList({
 									key={assignment.id}
 								>
 									<p>{assignment.name}</p>
-									<p>{assignment.priority}</p>
+									{assignment.priority >= 7 && (
+										<p className="text-red-500">
+											{assignment.allocation! > 60
+												? `${(assignment.allocation! / 60).toFixed(1)}h`
+												: `${assignment.allocation}m`}
+										</p>
+									)}
+									{assignment.priority >= 4 && assignment.priority <= 6 && (
+										<p className="text-yellow-500">
+											{assignment.allocation! > 60
+												? `${(assignment.allocation! / 60).toFixed(1)}h`
+												: `${assignment.allocation}m`}
+										</p>
+									)}
+									{assignment.priority < 4 && (
+										<p className="text-green-500">
+											{assignment.allocation! > 60
+												? `${(assignment.allocation! / 60).toFixed(1)}h`
+												: `${assignment.allocation}m`}
+										</p>
+									)}
 								</div>
 							))}
 					</div>

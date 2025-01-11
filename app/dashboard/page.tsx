@@ -26,22 +26,15 @@ export default async function Dashboard() {
 					<AssignmentsList assignments={assignments as Assignment[]} />
 				</div>
 				{assignments.length > 1 && (
-					<CalculateButton variant="destructive">
-						Calculate Schedule
-					</CalculateButton>
+					<CalculateButton>Calculate Schedule</CalculateButton>
 				)}
 			</div>
-			{assignments.length > 2 && (
-				<div className="flex flex-col items-start w-full mt-20 gap-4 mb-20">
-					<AvailabilityModel />
-					<div className="p-4 bg-[#0000000a] rounded-sm w-full flex">
-						<AvailabilityList
-							timeframes={timeframes as unknown as Timeframe[]}
-						/>
-					</div>
+			<div className="flex flex-col items-start w-full mt-20 gap-4 mb-20">
+				<AvailabilityModel />
+				<div className="p-4 bg-[#0000000a] rounded-sm w-full flex">
+					<AvailabilityList timeframes={timeframes as unknown as Timeframe[]} />
 				</div>
-			)}
-			``
+			</div>
 		</div>
 	);
 }

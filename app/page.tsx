@@ -7,12 +7,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import "swiper/css";
-import { Autoplay } from "swiper/modules";
 import React from "react";
 import Image from "next/image"; // Added missing import
-
-const swiperModules = [Autoplay]; // Define the Autoplay module
 
 export default function HomePage() {
   // Example slides data
@@ -23,10 +19,10 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-4 bg-white text-black overflow-x-hidden">
-      <div className="flex flex-col mt-16 p-4 rounded-md w-5/6 max-w-full m-0">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white text-black ml-20">
+      <div className="flex flex-col items-center justify-center mt-16 p-4 rounded-md w-full max-w-full m-0">
         <div className="flex flex-row w-full m-0">
-          <div className="text-7xl font-bold mb-8 text-left w-2/3 whitespace-nowrap">
+          <div className="text-7xl font-bold mb-8 text-left w-full whitespace-nowrap">
             <p>Plan smart.</p>
             <p>Balance better.</p>
             <p>Stress less.</p>

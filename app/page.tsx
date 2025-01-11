@@ -13,7 +13,7 @@ export default function HomePage() {
 	// Example slides data
 	const slides = [
 		{ image: "/chopped-chin-chopped.gif", alt: "Slide 1" },
-		{ image: "/logo.png", alt: "Slide 2" },
+		{ image: "/logo.gif", alt: "Slide 2" },
 		// Add more slides as needed
 	];
 

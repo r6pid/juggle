@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "./ui/button"; // Assuming you have a Button component
 
-export default function AssignmentsButton({
+export default function CalculateButton({
   children,
   variant,
 }: {
@@ -18,11 +18,6 @@ export default function AssignmentsButton({
   return (
     <Button
       variant={variant} // You can pass a variant for button styles (e.g., outline)
-      className="w-auto" // Styling for spacing and width
-      onClick={() => {
-        // Logic for adding an assignment, could be a modal, form, etc.
-        console.log("Add Assignment clicked");
-      }}
     >
       {children}
     </Button>

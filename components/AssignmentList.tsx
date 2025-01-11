@@ -48,19 +48,36 @@ export default function AssignmentList({
 			{assignments.map((assignment, index) => (
 				<div
 					key={index}
-					className="flex shadow-md items-center justify-between p-2 border w-full rounded-lg h-12"
+					className="flex shadow-md items-center justify-between p-2 px-4 border-muted2 border w-full rounded-lg h-12"
 				>
 					<p>{assignment.name}</p>
-					{loadingId === assignment.id ? (
-						<Loader size={18} className="animate-spin" />
-					) : (
-						<Trash
-							color={"red"}
-							size={18}
-							className="cursor-pointer"
-							onClick={() => deleteAssignment(assignment.id)}
-						/>
-					)}
+					<div className="flex flex-row items-center gap-3">
+						{assignment.priority >= 7 && (
+							<p className="font-semibold text-sm text-red-500">
+								High Priority
+							</p>
+						)}
+						{assignment.priority >= 4 && assignment.priority <= 6 && (
+							<p className="font-semibold text-sm text-yellow-500">
+								Medium Priority
+							</p>
+						)}
+						{assignment.priority < 4 && (
+							<p className="font-semibold text-sm text-green-500">
+								Low Priority
+							</p>
+						)}
+						{loadingId === assignment.id ? (
+							<Loader size={18} className="animate-spin" />
+						) : (
+							<Trash
+								color={"red"}
+								size={18}
+								className="cursor-pointer"
+								onClick={() => deleteAssignment(assignment.id)}
+							/>
+						)}
+					</div>
 				</div>
 			))}
 		</div>

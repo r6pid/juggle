@@ -12,6 +12,25 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "Assignment" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "timeframeId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "priority" INTEGER NOT NULL,
+    "difficulty" INTEGER NOT NULL,
+    "due" TIMESTAMP(3) NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Timeframe" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "startDate" TIMESTAMP(3) NOT NULL,
+    "endDate" TIMESTAMP(3) NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "Account" (
     "userId" TEXT NOT NULL,
     "type" TEXT NOT NULL,
@@ -66,10 +85,25 @@ CREATE TABLE "Authenticator" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Assignment_id_key" ON "Assignment"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Timeframe_id_key" ON "Timeframe"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Authenticator_credentialID_key" ON "Authenticator"("credentialID");
+
+-- AddForeignKey
+ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_timeframeId_fkey" FOREIGN KEY ("timeframeId") REFERENCES "Timeframe"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Assignment" ADD CONSTRAINT "Assignment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Timeframe" ADD CONSTRAINT "Timeframe_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
